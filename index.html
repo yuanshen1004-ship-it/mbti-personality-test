@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="一个轻量、好看的 16 型人格风格测试 Demo" />
+  <title>内在坐标 · 性格测试</title>
+  <style>
+    :root { --ink:#20243a; --muted:#72778f; --surface:rgba(255,255,255,.8); --line:#e9e9f2; --violet:#6e62d8; --pink:#ef7fb2; --mint:#5dbfad; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--ink); font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif; background:linear-gradient(135deg,#f8f3ff 0%,#fff 48%,#effcf9 100%); }
+    body::before, body::after { content:""; position:fixed; z-index:-1; border-radius:50%; filter:blur(8px); opacity:.55; }
+    body::before { width:28rem; height:28rem; top:-13rem; left:-9rem; background:#dccbff; }
+    body::after { width:25rem; height:25rem; right:-10rem; bottom:-11rem; background:#b9f2df; }
+    .shell { max-width:820px; min-height:100vh; margin:auto; padding:30px 24px 42px; display:flex; flex-direction:column; }
+    header { display:flex; justify-content:space-between; align-items:center; } .brand { font-weight:800; letter-spacing:.08em; } .badge { color:#6256c5; background:#eeeaff; border-radius:99px; padding:7px 12px; font-size:12px; }
+    main { flex:1; display:grid; place-items:center; }
+    .panel { width:min(100%,680px); background:var(--surface); border:1px solid rgba(255,255,255,.9); box-shadow:0 22px 60px rgba(57,45,110,.11); backdrop-filter:blur(12px); border-radius:28px; padding:clamp(28px,6vw,56px); }
+    .eyebrow { color:#7469d4; font-size:13px; font-weight:800; letter-spacing:.12em; } h1 { margin:12px 0 16px; font-size:clamp(33px,6vw,54px); letter-spacing:-.05em; line-height:1.12; } .lead { color:var(--muted); font-size:16px; line-height:1.85; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:9px; margin:28px 0; } .pill { padding:8px 11px; border-radius:12px; background:#f5f3ff; color:#625a9c; font-size:13px; }
+    button { appearance:none; border:0; border-radius:14px; padding:15px 21px; color:white; cursor:pointer; font:inherit; font-weight:700; background:linear-gradient(110deg,var(--violet),#8c65dc); box-shadow:0 10px 20px rgba(105,83,205,.25); transition:transform .2s, box-shadow .2s; } button:hover { transform:translateY(-2px); box-shadow:0 14px 24px rgba(105,83,205,.29); } button:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+    .tiny { margin:18px 0 0; color:#9296a8; font-size:12px; line-height:1.6; }
+    .hidden { display:none!important; }
+    .progress-meta { display:flex; justify-content:space-between; color:var(--muted); font-size:13px; margin-bottom:10px; } .track { height:8px; background:#ecebf5; border-radius:99px; overflow:hidden; } .bar { height:100%; width:0; background:linear-gradient(90deg,var(--pink),var(--violet)); transition:width .35s ease; }
+    .question { margin:50px 0 34px; font-size:clamp(25px,4vw,34px); letter-spacing:-.035em; line-height:1.4; } .scale { display:grid; gap:11px; }
+    .answer { display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:center; width:100%; padding:16px; color:var(--ink); text-align:left; background:rgba(255,255,255,.72); border:1px solid var(--line); box-shadow:none; } .answer:hover { border-color:#a79ee9; background:#faf9ff; } .answer.selected { color:#493eaa; border-color:#796dde; background:#f1efff; box-shadow:none; } .answer i { width:25px; height:25px; display:grid; place-items:center; border-radius:50%; color:#fff; font-style:normal; font-size:12px; background:#c7c8d6; } .answer.selected i { background:#7468d7; }
+    .nav { display:flex; justify-content:space-between; align-items:center; margin-top:32px; } .back { color:#7e8296; background:transparent; box-shadow:none; padding:10px; } .back:hover { box-shadow:none; }
+    .type { display:inline-flex; align-items:center; padding:8px 14px; border-radius:99px; color:#fff; font-size:14px; font-weight:800; letter-spacing:.08em; background:linear-gradient(100deg,#f27caf,#7466d8); } .result-title { margin-bottom:8px; } .result-text { margin:0 0 28px; color:var(--muted); line-height:1.85; }
+    .dimensions { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin:27px 0 32px; } .dimension { padding:15px; border-radius:16px; background:#f8f8fc; } .dimension label { display:flex; justify-content:space-between; font-size:13px; font-weight:700; } .dimension span { color:#7870d6; } .meter { margin-top:11px; height:7px; border-radius:99px; overflow:hidden; background:#e5e6ee; } .meter b { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#f190ba,#7669da); }
+    @media (max-width:520px) { .shell{padding:22px 16px} .panel{border-radius:22px;padding:30px 24px} .dimensions{grid-template-columns:1fr} .question{margin:38px 0 26px}.answer{padding:13px} }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header><div class="brand">内在坐标</div><div class="badge">16 型人格风格测试</div></header>
+    <main>
+      <section class="panel" id="intro">
+        <div class="eyebrow">PERSONALITY EXPLORATION</div>
+        <h1>更了解，<br>那个真实的你。</h1>
+        <p class="lead">用几分钟探索你如何获得能量、感知世界、做出决定，以及安排生活。</p>
+        <div class="pill-row"><span class="pill">12 道情境题</span><span class="pill">约 3 分钟</span><span class="pill">即时生成结果</span></div>
+        <button id="start">开始探索 →</button>
+        <p class="tiny">本测试仅供自我探索与娱乐参考，不构成心理诊断或专业评估。</p>
+      </section>
+      <section class="panel hidden" id="quiz" aria-live="polite">
+        <div class="progress-meta"><span id="counter">第 1 / 12 题</span><span id="dimension">能量来源</span></div><div class="track"><div class="bar" id="bar"></div></div>
+        <h2 class="question" id="question"></h2><div class="scale" id="answers"></div>
+        <div class="nav"><button class="back" id="back">← 上一题</button><button id="next" disabled>下一题 →</button></div>
+      </section>
+      <section class="panel hidden" id="result">
+        <div class="eyebrow">你的探索结果</div><h1 class="result-title" id="typeName"></h1><span class="type" id="typeCode"></span><p class="result-text" id="typeText"></p>
+        <div class="dimensions" id="dimensions"></div><button id="restart">重新测试</button><p class="tiny">倾向强度表示本次作答中的偏好程度，并非能力或固定标签。</p>
+      </section>
+    </main>
+  </div>
+  <script>
+    const questions = [
+      ['和陌生人一起参加活动时，我通常会主动认识新朋友。','EI','外向互动'], ['忙碌一天后，我更喜欢独处来恢复能量。','IE','能量来源'], ['我更相信经过验证的事实和实际经验。','SN','信息偏好'], ['我常会被“未来有哪些可能性”这样的想法吸引。','NS','信息偏好'], ['做决定时，我优先考虑逻辑是否一致、公平有效。','TF','决策方式'], ['即使很难，我也会优先顾及决定对他人的感受。','FT','决策方式'], ['旅行时，我喜欢提前规划好路线与时间安排。','JP','生活节奏'], ['面对计划改变，我往往觉得即兴调整也很有趣。','PJ','生活节奏'], ['在讨论中，我会边说边整理自己的想法。','EI','外向互动'], ['我习惯先观察、在心里想清楚后再表达。','IE','能量来源'], ['我喜欢把抽象概念、模式和不同观点联系起来。','NS','信息偏好'], ['临近截止日期的压力，有时反而能激发我的效率。','PJ','生活节奏']
+    ];
+    const labels=['非常不同意','不同意','不确定','同意','非常同意']; let index=0, answers=Array(questions.length).fill(null);
+    const $=id=>document.getElementById(id); const screens=['intro','quiz','result']; function show(id){screens.forEach(s=>$(s).classList.toggle('hidden',s!==id));}
+    function render(){ const q=questions[index]; $('counter').textContent=`第 ${index+1} / ${questions.length} 题`; $('dimension').textContent=q[2]; $('bar').style.width=`${((index+1)/questions.length)*100}%`; $('question').textContent=q[0]; $('back').disabled=index===0; $('next').disabled=answers[index]===null; $('next').textContent=index===questions.length-1?'查看结果 →':'下一题 →'; $('answers').innerHTML=labels.map((l,i)=>`<button class="answer ${answers[index]===i+1?'selected':''}" data-value="${i+1}"><i>${i+1}</i><span>${l}</span></button>`).join(''); document.querySelectorAll('.answer').forEach(b=>b.onclick=()=>{answers[index]=+b.dataset.value;render()}); }
+    function score(){ const s={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0}; questions.forEach((q,i)=>{let amount=(answers[i]-3); const [a,b]=q[1]; if(amount>=0)s[a]+=amount;else s[b]+=-amount;}); const pairs=[['E','I'],['S','N'],['T','F'],['J','P']]; return pairs.map(([a,b])=>s[a]>=s[b]?a:b).join(''); }
+    const profiles={INTJ:['策略师','独立、好奇，习惯把复杂问题拆解为可实现的长期方案。'],INTP:['思辨者','好奇而开放，喜欢探究概念背后的原理与可能性。'],ENTJ:['指挥者','目标清晰、果断，擅长把愿景组织成行动。'],ENTP:['探索者','反应敏捷、富有创意，享受挑战既有观点。'],INFJ:['洞察者','重视意义与连接，善于理解他人的深层需求。'],INFP:['理想主义者','真诚敏感，重视价值观并愿意守护内心热爱。'],ENFJ:['引领者','温暖有感召力，乐于支持他人成长。'],ENFP:['启发者','热情开放，善于发现人和事物中的新可能。'],ISTJ:['守序者','踏实可靠，注重细节与承诺。'],ISFJ:['守护者','细腻体贴，愿意用实际行动照顾他人。'],ESTJ:['执行者','务实直接，擅长建立秩序并推动事情落地。'],ESFJ:['协调者','热情周到，重视关系和集体的和谐。'],ISTP:['实践者','冷静灵活，喜欢动手解决真实问题。'],ISFP:['体验者','温和随性，对美感与当下体验保持敏锐。'],ESTP:['行动派','大胆敏锐，善于在变化中迅速抓住机会。'],ESFP:['表演者','热情有感染力，乐于创造轻松快乐的氛围。']};
+    function result(){const code=score(), p=profiles[code]; $('typeName').textContent=p[0]; $('typeCode').textContent=code; $('typeText').textContent=p[1]; const pairs=[['E','I','能量方向'],['S','N','信息偏好'],['T','F','决策方式'],['J','P','生活节奏']]; const counts={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0}; questions.forEach((q,i)=>{const a=answers[i]-3,[x,y]=q[1]; if(a>=0)counts[x]+=a;else counts[y]-=a;}); $('dimensions').innerHTML=pairs.map(([a,b,label])=>{const total=counts[a]+counts[b]||1, winner=counts[a]>=counts[b]?a:b, pct=Math.round(Math.max(counts[a],counts[b])/total*100);return `<div class="dimension"><label>${label}<span>偏 ${winner} · ${pct}%</span></label><div class="meter"><b style="width:${pct}%"></b></div></div>`}).join(''); show('result');}
+    $('start').onclick=()=>{show('quiz');render()}; $('back').onclick=()=>{if(index){index--;render()}}; $('next').onclick=()=>{if(index===questions.length-1)result();else{index++;render()}}; $('restart').onclick=()=>{index=0;answers.fill(null);show('intro')};
+  </script>
+</body>
+</html>
